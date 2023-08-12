@@ -10,13 +10,11 @@ router = Router()
 #         self._order_book[symbol][side] = {key: orders[key] for key in prices}
 
 
-@router.depth_update()
-def processing_1(depth):
-    pass
-    print("bids:", depth["bids"])
+# @router.depth_update()
+# def processing_1(depth: dict):
+#     print("bids:", depth.keys())
 
 
-@router.depth_update()
-def processing_2(depth):
-    pass
-    # print("asks:", depth["asks"][:10])
+# @router.analysis_update()
+# def processing_2(analysis):
+#     print(analysis)

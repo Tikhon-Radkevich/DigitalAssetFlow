@@ -1,6 +1,8 @@
 import logging
 import asyncio
+import time
 
+from TradingView.CustomRequest import CustomRequest
 from CustomSocket import MyWebSocket
 from Router import Router
 
@@ -17,6 +19,7 @@ class Dispatcher:
         self.router = router
         self.depth = []
         self.depth_socket = MyWebSocket(self.symbols, 1000)
+        self.TechnicalAnalysis = CustomRequest(self.symbols)
 
     async def _run_socket(self):
         try:
@@ -27,8 +30,13 @@ class Dispatcher:
     async def _run_main_loop(self):
         while True:
             await asyncio.sleep(10)
+            start = time.time()
             depth = await self.depth_socket.get_order_book(self.symbols[0])
-            self.router(depth=depth)
+            depth_time = time.time()
+            print("depth:", depth_time-start)
+            analysis = await self.TechnicalAnalysis.get_analysis()
+            print("analysis:", time.time()-depth_time)
+            self.router(depth=depth, analysis=analysis)
 
     async def run(self):
         await asyncio.gather(self._run_socket(), self._run_main_loop())

@@ -3,6 +3,8 @@
 # Rewritten from https://www.tradingview.com/static/bundles/technicals.f2e6e6a51aebb6cd46f8.js
 # License: MIT
 
+# __version__ = "3.3.0"
+
 
 class Recommendation:
     buy = "BUY"

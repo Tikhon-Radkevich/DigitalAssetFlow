@@ -1,10 +1,10 @@
-import websockets
-import aiohttp
+import logging
 import asyncio
 import json
 import time
 
-import logging
+import websockets
+import aiohttp
 
 
 class MyWebSocket:
@@ -56,7 +56,7 @@ class MyWebSocket:
             self._symbols_for_snapshot.append(message["s"])
 
     async def _make_snapshot(self):
-        logging.warning(f"{', '.join(self._symbols_for_snapshot)} - snapshot")
+        logging.warning(f" snapshot: {', '.join(self._symbols_for_snapshot)}")
         async with aiohttp.ClientSession() as session:
             tasks = [self._get_depth(symbol, session) for symbol in self._symbols_for_snapshot]
             results = await asyncio.gather(*tasks)
