@@ -19,8 +19,14 @@ ANALISE_INTERVALS = ["1W", "1M"]
 
 
 async def main():
+    logging.basicConfig(
+        # filename="../debug.log",
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    )
+
     storage = Storage()
-    dp = Dispatcher(storage, BINANCE_SYMBOLS, ANALISE_INTERVALS)
+    dp = Dispatcher(storage, BINANCE_SYMBOLS, ANALISE_INTERVALS, depth_limit=5)
     dp.register_router(router)
     await dp.run()
 

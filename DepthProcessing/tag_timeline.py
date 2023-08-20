@@ -1,5 +1,3 @@
-
-
 def tag_timeline(timeline, required_growth: float, acceptable_loss: float, required_positive_duration: int):
     """
     This function tags the timeline data with buy (1) or wait (0) labels. It

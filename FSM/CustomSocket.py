@@ -19,13 +19,27 @@ class CustomWebSocket:
         self._symbols_for_snapshot: list = symbols.copy()
         self._end_time = None
 
-    async def get_order_book(self, symbol):
-        book = {
-            "symbol": symbol,
-            "bids": self._order_book[symbol]["bids"],
-            "asks": self._order_book[symbol]["asks"]
-        }
-        return book
+    # async def get_order_book(self, symbol):
+    #     book = {
+    #         "symbol": symbol,
+    #         "bids": self._order_book[symbol]["bids"],
+    #         "asks": self._order_book[symbol]["asks"]
+    #     }
+    #     return book
+
+    async def get_order_book(self):
+        depth = {}
+        for symbol in self._symbols:
+            depth[symbol] = {}
+            for side in ["asks", "bids"]:
+                orders = self._order_book[symbol][side].copy()
+                prices = sorted(orders.keys(), reverse=True)
+                depth[symbol].update({side: [[price, orders[price]] for price in prices]})
+            # depth[symbol] = {
+            #     "bids": self._order_book[symbol]["bids"].copy(),
+            #     "asks": self._order_book[symbol]["asks"].copy()
+            # }
+        return depth
 
     async def subscribe(self, close_timeout=0.2, ping_timeout=40):
         url = self.STREAM_URL + "/".join([f"{symbol.lower()}@depth@{self.UPDATE_SPEED}ms" for symbol in self._symbols])
@@ -66,6 +80,8 @@ class CustomWebSocket:
             tasks = [self._get_depth(symbol, session) for symbol in self._symbols_for_snapshot]
             results = await asyncio.gather(*tasks)
         for message in results:
+            self._order_book[message["s"]]["asks"].clear()
+            self._order_book[message["s"]]["bids"].clear()
             await self._process_updates(message)
         self._symbols_for_snapshot.clear()
 
@@ -78,6 +94,7 @@ class CustomWebSocket:
                     self._order_book[message["s"]][name].pop(price, None)
                 else:
                     self._order_book[message["s"]][name][price] = volume
+        # todo sort?
 
     async def _get_depth(self, symbol, session):
         snapshot_url = f"https://api.binance.com/api/v3/depth?symbol={symbol.upper()}&limit={self._limits}"

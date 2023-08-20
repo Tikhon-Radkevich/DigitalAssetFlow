@@ -15,8 +15,7 @@ router = Router()
 
 @router.depth_update()
 def processing_1(depth: dict, storage: dict):
-    sleep(5)
-    print("depth update")
+    print(depth)
 
 
 @router.analysis_update()
