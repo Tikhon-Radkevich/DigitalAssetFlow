@@ -89,6 +89,7 @@ class CustomRequest:
                     }
             return data
         except Exception as e:
+            # todo
             logging.error(str(e))
             request_error_count += 1
             if request_error_count < 3:

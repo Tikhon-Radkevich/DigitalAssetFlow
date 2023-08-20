@@ -35,6 +35,7 @@ class CustomWebSocket:
                 async with websockets.connect(url, close_timeout=close_timeout, ping_timeout=ping_timeout) as websocket:
                     i = 0
                     while True:
+                        # todo remove debug print
                         i += 1
                         if i > 3: i = 0
                         print("tick"+"."*i)
