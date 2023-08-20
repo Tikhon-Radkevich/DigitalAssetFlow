@@ -22,25 +22,35 @@ class CustomRequest:
         "Pivot.M.Woodie.R2", "Pivot.M.Woodie.R3", "Pivot.M.Demark.S1", "Pivot.M.Demark.Middle", "Pivot.M.Demark.R1",
         "open", "P.SAR", "BB.lower", "BB.upper", "AO[2]", "volume", "change", "low", "high"
     ]
-
-    INDICATORS_NAME = "indicators"
-    # todo add intervals
-    ANALISE_INTERVALS = ["1m", "5m", "15m", "30m", "1h", "2h", "4h", "1d"]
-    INDICATOR_INTERVALS = ["|1", "|5", "|15", "|30", "|60", "|120", "|240", ""]
+    INTERVALS = {
+        "1m": "|1",
+        "5m": "|5",
+        "15m": "|15",
+        "30m": "|30",
+        "1h": "|60",
+        "2h": "|120",
+        "4h": "|240",
+        "1d": "",
+        "1W": "|1W",
+        "1M": "|1M"
+    }
     SCAN_URL = "https://scanner.tradingview.com/crypto/scan"
     HEADERS = {'User-Agent': 'tradingview_ta/3.3.0'}
-    TIMEOUT = None
+    TIMEOUT = 5
     PROXIES = None
 
-    def __init__(self, symbols, exchange="BINANCE"):
+    def __init__(self, symbols, intervals, exchange="BINANCE"):
+        self.intervals = intervals
         self._exchange = exchange
         self._symbols = symbols
         self._ta_to_symbol = self._create_ta_to_symbol()
-        self._request_data = self._get_request_data()
+        self._request_json = self._get_request_json()
 
     async def _request_analysis(self):
         async with aiohttp.ClientSession() as session:
-            response = await session.post(self.SCAN_URL, json=self._request_data, headers=self.HEADERS, timeout=5)
+            response = await session.post(
+                self.SCAN_URL, json=self._request_json, headers=self.HEADERS, timeout=self.TIMEOUT
+            )
             if response.status != 200:
                 raise Exception(f"Can't access TradingView's API. HTTP status code: {response.status}.")
             json_response = await response.json()
@@ -59,9 +69,9 @@ class CustomRequest:
                     "symbol": symbol,
                     "TA": {}
                 }
-                for i, interval in enumerate(self.ANALISE_INTERVALS):
+                for i, interval in enumerate(self.intervals):
                     indicators_dict = {}
-                    indicators_values = symbol_data["d"][i::len(self.ANALISE_INTERVALS)]
+                    indicators_values = symbol_data["d"][i::len(self.intervals)]
                     for x in range(len(self.INDICATORS)):
                         indicators_dict[self.INDICATORS[x]] = indicators_values[x]
                     my_analysis = calculate(
@@ -86,15 +96,16 @@ class CustomRequest:
                 return await self.get_analysis(request_error_count)
             raise Exception("Can't get analysis for 3 times!")
 
-    def _get_request_data(self):
+    def _get_request_json(self):
+        tickers = [f"{self._exchange}:{coin}" for coin in self._symbols]
+        columns = [x + self.INTERVALS[interval] for x in self.INDICATORS for interval in self.intervals]
         return {
-            "symbols": {"tickers": [f"{self._exchange}:{coin.replace('/', '')}" for coin in self._symbols],
-                        "query": {"types": []}},
-            "columns": [x + interval for x in self.INDICATORS for interval in self.INDICATOR_INTERVALS]
+            "symbols": {"tickers": tickers, "query": {"types": []}},
+            "columns": columns
         }
 
     def _create_ta_to_symbol(self):
         ta_to_symbol = {}
         for symbol in self._symbols:
-            ta_to_symbol[f"{self._exchange}:{symbol.replace('/', '')}"] = symbol
+            ta_to_symbol[f"{self._exchange}:{symbol}"] = symbol
         return ta_to_symbol

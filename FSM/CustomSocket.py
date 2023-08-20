@@ -7,7 +7,7 @@ import websockets
 import aiohttp
 
 
-class MyWebSocket:
+class CustomWebSocket:
     UPDATE_SPEED = 1000  # ms
     SOCKET_LIFETIME = 12*60*60
     STREAM_URL = "wss://stream.binance.com:443/ws/"
@@ -33,7 +33,11 @@ class MyWebSocket:
             self._end_time = time.time() + self.SOCKET_LIFETIME
             try:
                 async with websockets.connect(url, close_timeout=close_timeout, ping_timeout=ping_timeout) as websocket:
+                    i = 0
                     while True:
+                        i += 1
+                        if i > 3: i = 0
+                        print("tick"+"."*i)
                         if time.time() > self._end_time:
                             logging.info("socket reconnect")
                             break

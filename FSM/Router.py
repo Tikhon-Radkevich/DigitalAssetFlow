@@ -1,39 +1,17 @@
-class DepthUpdateEvent:
-    def __init__(self):
-        self.handlers = []
-
-    def __call__(self):
-        def wrapper(handler):
-            self.handlers.append(handler)
-        return wrapper
-
-    def execute(self, **kwargs):
-        for handler in self.handlers:
-            handler(**kwargs)
-
-
-class AnalysisUpdateEvent:
-    def __init__(self):
-        self.handlers = []
-
-    def __call__(self):
-        def wrapper(handler):
-            self.handlers.append(handler)
-        return wrapper
-
-    def execute(self, **kwargs):
-        for handler in self.handlers:
-            handler(**kwargs)
+from events import DepthUpdateEvent, AnalysisUpdateEvent, SaveDataEvent
 
 
 class Router:
     def __init__(self):
         self.depth_update = DepthUpdateEvent()
         self.analysis_update = AnalysisUpdateEvent()
+        self.save_date = SaveDataEvent()
 
     def __call__(self, **kwargs):
+        storage = kwargs["storage"]
         depth = kwargs["depth"]
         analysis = kwargs["analysis"]
-        self.depth_update.execute(depth=depth)
-        self.analysis_update.execute(analysis=analysis)
+        self.depth_update.execute(depth=depth, storage=storage)
+        self.analysis_update.execute(analysis=analysis, storage=storage)
+        self.save_date.execute(storage=storage)
 

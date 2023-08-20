@@ -1,7 +1,10 @@
+from time import sleep
+
 from Router import Router
 
 
 router = Router()
+
 
 # def _sort_order_book(self, symbol):
 #     for side in ["asks", "bids"]:
@@ -10,11 +13,14 @@ router = Router()
 #         self._order_book[symbol][side] = {key: orders[key] for key in prices}
 
 
-# @router.depth_update()
-# def processing_1(depth: dict):
-#     print("bids:", depth.keys())
+@router.depth_update()
+def processing_1(depth: dict, storage: dict):
+    sleep(5)
+    print("depth update")
 
 
-# @router.analysis_update()
-# def processing_2(analysis):
-#     print(analysis)
+@router.analysis_update()
+def processing_2(analysis, storage):
+    sleep(5)
+    print("analysis update")
+
