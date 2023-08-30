@@ -3,10 +3,10 @@ import logging
 import asyncio
 import time
 
-from TradingView.CustomRequest import CustomRequest
+from FSM.TradingView.CustomRequest import CustomRequest
 from FSM.CustomSocket import CustomWebSocket
-from Storage import Storage
-from Router import Router
+from FSM.Storage import Storage
+from FSM.Router import Router
 
 
 class Dispatcher:

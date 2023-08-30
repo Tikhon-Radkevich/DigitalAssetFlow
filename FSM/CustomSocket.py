@@ -9,11 +9,12 @@ import aiohttp
 
 class CustomWebSocket:
     """ Docs: https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md
+
     SOCKET_LIFETIME: A single connection to stream.binance.com is only valid for 24 hours;
                     expect to be disconnected at the 24h mark
     UPDATE_SPEED: 1000ms or 100ms
-    STREAM_URL: The base endpoint is: wss://stream.binance.com:9443 or wss://stream.binance.com:443 """
-
+    STREAM_URL: The base endpoint is: wss://stream.binance.com:9443 or wss://stream.binance.com:443
+    """
     SOCKET_LIFETIME = 12*3600  # 12h
     # UPDATE_SPEED = 100
     UPDATE_SPEED = 1000
