@@ -38,3 +38,37 @@ def tag_timeline(timeline, required_growth: float, acceptable_loss: float, requi
                 timeline[-i]["y"] = 1
                 timeline[-i]["grow_time"] = j - required_positive_duration
                 break  # Exit the loop as we have found the necessary conditions.
+
+
+def get_labeled_data(data, timeline_length, required_growth, acceptable_loss, required_positive_duration,  depth_size):
+    timeline_length += required_positive_duration
+    labeled_data = {}
+    for symbol, coin_data in data.items():
+        labeled_data[symbol] = {
+            "datetimes": [],
+            "grow_times": [],
+            "y": [],
+            "min_asks_prices": [],
+            "max_bids_prices": [],
+            "bids": [],
+            "asks": [],
+        }
+        timeline = []
+        datetimes = sorted(list(coin_data.keys()))
+        for datetime in datetimes:
+            order_book = coin_data[datetime]
+            order_book["grow_time"] = -1
+            order_book["y"] = 0
+            order_book["datetime"] = datetime
+            timeline.append(order_book)
+            tag_timeline(timeline, required_growth, acceptable_loss, required_positive_duration)
+            if len(timeline) > timeline_length:
+                book = timeline.pop(0)
+                labeled_data[symbol]["y"].append(book["y"])
+                labeled_data[symbol]["grow_times"].append(book["grow_time"])
+                labeled_data[symbol]["datetimes"].append(book["datetime"])
+                labeled_data[symbol]["min_asks_prices"].append(book["min_asks_price"])
+                labeled_data[symbol]["max_bids_prices"].append(book["max_bid_price"])
+                labeled_data[symbol]["bids"].append(book["bids"][:depth_size])
+                labeled_data[symbol]["asks"].append(book["asks"][:depth_size])
+    return labeled_data
