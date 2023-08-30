@@ -1,7 +1,7 @@
 from tag_timeline import tag_timeline
 
 
-timeline_length = 30  # (5m)
+timeline_length = 120  # (20m)
 required_growth = 0.004  # (0.4%)
 acceptable_loss = 0.0019  # (0.19%)
 required_positive_duration = 3  # (30s)
@@ -25,6 +25,7 @@ def get_labeled_data(data, depth_size=64):
         datetimes = sorted(list(coin_data.keys()))
         for datetime in datetimes:
             order_book = coin_data[datetime]
+            order_book["grow_time"] = -1
             order_book["y"] = 0
             order_book["datetime"] = datetime
             timeline.append(order_book)

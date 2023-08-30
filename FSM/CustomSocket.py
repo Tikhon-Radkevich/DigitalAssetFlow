@@ -8,8 +8,16 @@ import aiohttp
 
 
 class CustomWebSocket:
-    UPDATE_SPEED = 1000  # ms
-    SOCKET_LIFETIME = 12*60*60
+    """ Docs: https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md
+    SOCKET_LIFETIME: A single connection to stream.binance.com is only valid for 24 hours;
+                    expect to be disconnected at the 24h mark
+    UPDATE_SPEED: 1000ms or 100ms
+    STREAM_URL: The base endpoint is: wss://stream.binance.com:9443 or wss://stream.binance.com:443 """
+
+    SOCKET_LIFETIME = 12*3600  # 12h
+    # UPDATE_SPEED = 100
+    UPDATE_SPEED = 1000
+    # STREAM_URL = "wss://stream.binance.com:9443"
     STREAM_URL = "wss://stream.binance.com:443/ws/"
 
     def __init__(self, symbols: list, limits=1000):
@@ -19,27 +27,19 @@ class CustomWebSocket:
         self._symbols_for_snapshot: list = symbols.copy()
         self._end_time = None
 
-    # async def get_order_book(self, symbol):
-    #     book = {
-    #         "symbol": symbol,
-    #         "bids": self._order_book[symbol]["bids"],
-    #         "asks": self._order_book[symbol]["asks"]
-    #     }
-    #     return book
-
     async def get_order_book(self):
-        depth = {}
+        order_book = {}
         for symbol in self._symbols:
-            depth[symbol] = {}
-            for side in ["asks", "bids"]:
-                orders = self._order_book[symbol][side].copy()
-                prices = sorted(orders.keys(), reverse=True)
-                depth[symbol].update({side: [[price, orders[price]] for price in prices]})
-            # depth[symbol] = {
-            #     "bids": self._order_book[symbol]["bids"].copy(),
-            #     "asks": self._order_book[symbol]["asks"].copy()
-            # }
-        return depth
+            order_book[symbol] = {}
+
+            asks_orders = self._order_book[symbol]["asks"].copy()
+            asks_prices = sorted(asks_orders.keys(), reverse=False)[:self._limits]
+            order_book[symbol].update({"asks": [[price, asks_orders[price]] for price in asks_prices]})
+
+            bids_orders = self._order_book[symbol]["bids"].copy()
+            bids_prices = sorted(bids_orders.keys(), reverse=True)[:self._limits]
+            order_book[symbol].update({"bids": [[price, bids_orders[price]] for price in bids_prices]})
+        return order_book
 
     async def subscribe(self, close_timeout=0.2, ping_timeout=40):
         url = self.STREAM_URL + "/".join([f"{symbol.lower()}@depth@{self.UPDATE_SPEED}ms" for symbol in self._symbols])
@@ -47,12 +47,7 @@ class CustomWebSocket:
             self._end_time = time.time() + self.SOCKET_LIFETIME
             try:
                 async with websockets.connect(url, close_timeout=close_timeout, ping_timeout=ping_timeout) as websocket:
-                    i = 0
                     while True:
-                        # todo remove debug print
-                        i += 1
-                        if i > 3: i = 0
-                        print("tick"+"."*i)
                         if time.time() > self._end_time:
                             logging.info("socket reconnect")
                             break
@@ -94,7 +89,6 @@ class CustomWebSocket:
                     self._order_book[message["s"]][name].pop(price, None)
                 else:
                     self._order_book[message["s"]][name][price] = volume
-        # todo sort?
 
     async def _get_depth(self, symbol, session):
         snapshot_url = f"https://api.binance.com/api/v3/depth?symbol={symbol.upper()}&limit={self._limits}"

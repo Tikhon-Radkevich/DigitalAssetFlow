@@ -14,7 +14,7 @@ from process_handler import router
 BINANCE_SYMBOLS = [
         "KLAY/USDT"
     ]
-# ANALISE_INTERVALS = ["1m", "5m", "15m", "30m", "1h", "2h", "4h", "1d"]
+# ANALISE_INTERVALS = ["1m", "5m", "15m", "30m", "1h", "2h", "4h", "1d", "1W", "1M"]
 ANALISE_INTERVALS = ["1W", "1M"]
 
 

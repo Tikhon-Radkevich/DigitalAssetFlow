@@ -11,13 +11,16 @@ from Router import Router
 
 class Dispatcher:
     def __init__(self, storage: Storage, symbols: List[str], intervals: List[str], update_time=10, depth_limit=1000):
-        """
-        Initialize the Dispatcher instance.
+        """ Initialize the Dispatcher instance.
 
         :param storage: The storage for saving data.
         :param symbols: List of trading symbols (e.g., ["BTC/USDT", ...]).
-        :param intervals: List of time intervals for technical analysis.
+        :param intervals: List of time intervals for technical analysis;
+                         Available: "1m", "5m", "15m", "30m", "1h", "2h", "4h", "1d", "1W", "1M"
+        :param update_time: Int value.
+        :param depth_limit: Int value.
         """
+
         self.routers = []
         self.__storage = storage
         self.update_time = update_time
