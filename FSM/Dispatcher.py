@@ -38,18 +38,26 @@ class Dispatcher:
             logging.error(e, exc_info=True)
 
     async def _run_main_loop(self):
+        """ This function continuously updates data at a fixed rate, executing handlers with the latest data.
+
+        Important: Handlers should be optimized to complete within the expected 'update_time' to ensure timely updates.
+        Executor: Handlers are run using the executor, ensuring that other tasks, like socket operations,
+                  are not delayed by lengthy handler execution. """
+
         loop = asyncio.get_event_loop()
         start_time = time.time()
         while True:
             sleep_time = self.update_time - (time.time() - start_time)
             if sleep_time < 0:
-                logging.warning(f"Handlers executing out of time")
+                logging.warning("Handlers exceeded the expected update time.")
             else:
                 await asyncio.sleep(sleep_time)
             start_time = time.time()
 
             depth = await self.depth_socket.get_order_book()
             analysis = await self.TechnicalAnalysis.get_analysis()
+
+            # Run handlers asynchronously using the executor
             await loop.run_in_executor(None, self._execute_handlers, depth, analysis)
 
     def _execute_handlers(self, depth, analysis):

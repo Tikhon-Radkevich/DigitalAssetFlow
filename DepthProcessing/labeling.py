@@ -1,6 +1,5 @@
 def tag_timeline(timeline, required_growth: float, acceptable_loss: float, required_positive_duration: int):
-    """
-    This function tags the timeline data with buy (1) or wait (0) labels. It
+    """ This function tags the timeline data with buy (1) or wait (0) labels. It
     iterates segments in direct order, but takes each segment starting from
     the end of timeline.
 
@@ -8,8 +7,8 @@ def tag_timeline(timeline, required_growth: float, acceptable_loss: float, requi
     :param required_growth: Minimum growth threshold for a buy signal (take-profit)
     :param acceptable_loss: Maximum loss threshold for a buy signal (stop-loss)
     :param required_positive_duration: Minimum number of consecutive time intervals
-                                      with positive growth for a buy signal.
-    """
+                                      with positive growth for a buy signal. """
+
     for i in range(1, len(timeline)):
         # If the current data point is already tagged as "buy" (1)
         if timeline[-i]["y"] == 1:
@@ -41,6 +40,16 @@ def tag_timeline(timeline, required_growth: float, acceptable_loss: float, requi
 
 
 def get_labeled_data(data, timeline_length, required_growth, acceptable_loss, required_positive_duration,  depth_size):
+    """ This function tags data with buy (1) or wait (0) labels.
+
+    :param data: Dict with order_book data.
+    :param timeline_length: Length of timeline.
+    :param depth_size: bids/asks arrays length.
+    :param required_growth: Minimum growth threshold for a buy signal (take-profit)
+    :param acceptable_loss: Maximum loss threshold for a buy signal (stop-loss)
+    :param required_positive_duration: Minimum number of consecutive time intervals
+                                      with positive growth for a buy signal. """
+
     timeline_length += required_positive_duration
     labeled_data = {}
     for symbol, coin_data in data.items():

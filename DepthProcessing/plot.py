@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 from tqdm import tqdm
 import numpy as np
 
-from tag_data import get_labeled_data
+from labeling import get_labeled_data
 
 
 LABELED_DATA_PATH = "../data/LabeledDepthData"
