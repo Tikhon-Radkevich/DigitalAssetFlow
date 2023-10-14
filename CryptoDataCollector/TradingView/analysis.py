@@ -1,6 +1,6 @@
 import datetime
 
-from FSM.TradingView.technicals import Compute
+from CryptoDataCollector.TradingView.technicals import Compute
 
 
 class Analysis(object):

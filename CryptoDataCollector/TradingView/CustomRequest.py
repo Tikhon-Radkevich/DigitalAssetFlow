@@ -1,7 +1,7 @@
 import logging
 import asyncio
 
-from FSM.TradingView.analysis import calculate
+from CryptoDataCollector.TradingView.analysis import calculate
 import aiohttp
 
 

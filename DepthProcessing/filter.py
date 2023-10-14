@@ -55,20 +55,23 @@ def get_order_book(order_book_json, pct_chang=0.032):
     data = {}
     for dtime_ms, order_book in order_book_json.items():
         # Process bids
-        bids = np.array(order_book["bids"])  # Bid prices are in descending order
+        bids = np.array(order_book["bids"])
         max_bid_price = bids[0][0]  # Get the current highest bid price
-        bids = filter_bids(bids, pct_chang, book_length)  # Filter and align bids
+        if max_bid_price < bids[1][0]:
+            raise ValueError("The order book is not sorted correctly")
+        bids = filter_bids(bids, pct_chang, book_length)
 
         # Process asks
-        asks = np.array(order_book["asks"])[::-1]  # Reverse to ascending order as asks are in ascending order
+        asks = np.array(order_book["asks"])
         min_asks_price = asks[0][0]  # Get the current lowest ask price
-        asks = filter_asks(asks, pct_chang, book_length)  # Filter and align asks
+        if min_asks_price > asks[1][0]:
+            raise ValueError("The order book is not sorted correctly")
+        asks = filter_asks(asks, pct_chang, book_length)
 
-        # Store the processed data
         data[dtime_ms] = {
-            "bids": bids.tolist(),  # Converted back to a list
+            "bids": bids.tolist(),
             "max_bids_price": max_bid_price,  # Current selling price
-            "asks": asks.tolist(),  # Converted back to a list
+            "asks": asks.tolist(),
             "min_asks_price": min_asks_price,  # Current purchase price
         }
     return data

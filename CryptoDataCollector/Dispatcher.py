@@ -3,10 +3,10 @@ import logging
 import asyncio
 import time
 
-from FSM.TradingView.CustomRequest import CustomRequest
-from FSM.CustomSocket import CustomWebSocket
-from FSM.Storage import Storage
-from FSM.Router import Router
+from CryptoDataCollector.TradingView.CustomRequest import CustomRequest
+from CryptoDataCollector.CustomSocket import CustomWebSocket
+from CryptoDataCollector.Storage import Storage
+from CryptoDataCollector.Router import Router
 
 
 class Dispatcher:
@@ -18,7 +18,10 @@ class Dispatcher:
         :param intervals: List of time intervals for technical analysis;
                          Available: "1m", "5m", "15m", "30m", "1h", "2h", "4h", "1d", "1W", "1M"
         :param update_time: Int value.
-        :param depth_limit: Int value.
+        :param depth_limit: Int value from 1 to 5000;
+                           see https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md#order-book
+                           Binance api weight limit - 6,000 per minute
+                           socket makes
         """
 
         self.routers = []
@@ -57,7 +60,7 @@ class Dispatcher:
             depth = await self.depth_socket.get_order_book()
             analysis = await self.TechnicalAnalysis.get_analysis()
 
-            # Run handlers asynchronously using the executor
+            # Run handlers
             await loop.run_in_executor(None, self._execute_handlers, depth, analysis)
 
     def _execute_handlers(self, depth, analysis):

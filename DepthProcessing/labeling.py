@@ -12,7 +12,7 @@ def tag_timeline(timeline, required_growth: float, acceptable_loss: float, requi
     for i in range(1, len(timeline)):
         # If the current data point is already tagged as "buy" (1)
         if timeline[-i]["y"] == 1:
-            continue  # move to the next point
+            continue
 
         # Extract timeline segment for analysis.
         segment = timeline[-i:]
@@ -29,14 +29,14 @@ def tag_timeline(timeline, required_growth: float, acceptable_loss: float, requi
             # Check if the change in price goes below the acceptable loss threshold
             elif change < -acceptable_loss:
                 # Exit the function, marking this point as "wait" (0)
-                return  # Skip other segment in this timeline
+                return
 
             # Check if the minimum positive duration is met.
             if positive_duration >= required_positive_duration:
                 # Mark this point as "buy" (1) and record the grow_time.
                 timeline[-i]["y"] = 1
                 timeline[-i]["grow_time"] = j - required_positive_duration
-                break  # Exit the loop as we have found the necessary conditions.
+                break
 
 
 def get_labeled_data(data, timeline_length, required_growth, acceptable_loss, required_positive_duration,  depth_size):

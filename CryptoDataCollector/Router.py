@@ -1,4 +1,4 @@
-from FSM.events import DepthUpdateEvent, AnalysisUpdateEvent, SaveDataEvent
+from CryptoDataCollector.events import DepthUpdateEvent, AnalysisUpdateEvent, SaveDataEvent
 
 
 class Router:
