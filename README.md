@@ -4,6 +4,8 @@
 
 This project provides a robust solution for real-time cryptocurrency data collection from two primary sources: Binance, one of the world's leading cryptocurrency exchanges, and TradingView, offering a variety of trading indicators and analytics. The project's core functionality centers around asynchronous data collection, enabling rapid and efficient data retrieval. Moreover, it offers robust data processing and analysis capabilities to support various applications, including trading strategies, investment decisions, and data-driven insights.
 
+![](img/back.png)
+
 ### Data Sources
 
 - **Binance**: The project collects real-time depth data for various cryptocurrency pairs from Binance, a globally recognized cryptocurrency exchange.
@@ -18,8 +20,11 @@ Designed for speed and efficiency, the project's data collection process is asyn
 
 Beyond data collection, the project offers robust data processing capabilities. You can efficiently process and analyze the collected data, making it suitable for diverse applications, including the development of trading strategies, investment decision support, and data-driven insights.
 
-Here is an example of filter.py work:
-[![Dashboard](img/oviginalVScommpressed.png)](https://chart-studio.plotly.com/~tikhon.radk/11#/)[Dashboard](https://chart-studio.plotly.com/~tikhon.radk/11#/)
+Here is an example of filter.py work [Dashboard](https://chart-studio.plotly.com/~tikhon.radk/11#/):
+[![Dashboard](img/oviginalVScommpressed.png)](https://chart-studio.plotly.com/~tikhon.radk/11#/)
+
+An example of labeling.py work [Dashboard](https://chart-studio.plotly.com/~tikhon.radk/16/#/):
+[![Dashboard](img/Labeling.png)](https://chart-studio.plotly.com/~tikhon.radk/16/#/)
 
 
 ### Extensibility and Custom Events
