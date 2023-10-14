@@ -43,7 +43,7 @@ This collaborative approach invites contributors and users to work together, sha
 
 ## Data Storage Example
 When I collected data, I used the following structure:
-``` markdown
+``` python
 {
   "time_1_ms": {
     "symbol": "SYMBOL/PAIR", 
