@@ -1,10 +1,10 @@
 # Project Title
 
+![](img/back.png)
+
 ## Overview
 
 This project provides a robust solution for real-time cryptocurrency data collection from two primary sources: Binance, one of the world's leading cryptocurrency exchanges, and TradingView, offering a variety of trading indicators and analytics. The project's core functionality centers around asynchronous data collection, enabling rapid and efficient data retrieval. Moreover, it offers robust data processing and analysis capabilities to support various applications, including trading strategies, investment decisions, and data-driven insights.
-
-![](img/back.png)
 
 ### Data Sources
 
