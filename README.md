@@ -24,6 +24,8 @@ The project's architecture encourages extensibility. You are invited to create n
 
 This collaborative approach invites contributors and users to work together, share custom events, and explore innovative use cases in the dynamic realm of cryptocurrency data analysis and trading.
 
+## Usage
+
 ### 1. [process_handler.py](https://github.com/Tikhon-Radkevich/CryptoModel/blob/main/process_handler.py)
 
 - **Event Processing Order**: Events are processed in the order: `depth_update` -> `analysis_update` -> `save_data`
@@ -41,7 +43,7 @@ This collaborative approach invites contributors and users to work together, sha
 
 ## Data Storage Example
 When I collected data, I used the following structure:
-``` json
+``` markdown
 {
   "time_1_ms": {
     "symbol": "SYMBOL/PAIR", 
