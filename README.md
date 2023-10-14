@@ -78,5 +78,20 @@ When I collected data, I used the following structure:
   "time_n_ms": {....}
 }
 ```
+## Installation
 
+To get started with, follow these steps:
+
+1. **Clone the Repository**: 
+
+   ```bash
+   git clone https://github.com/Tikhon-Radkevich/DigitalAssetFlow
+   ```
+   
+2. **Install Dependencies:** Navigate to the project directory and install the required Python dependencies using pip and the provided requirements.txt file: cd your-repository
+    ```bash
+    cd DigitalAssetFlow
+    pip install -r requirements.txt  
+    ```
+ 
 
