@@ -18,6 +18,10 @@ Designed for speed and efficiency, the project's data collection process is asyn
 
 Beyond data collection, the project offers robust data processing capabilities. You can efficiently process and analyze the collected data, making it suitable for diverse applications, including the development of trading strategies, investment decision support, and data-driven insights.
 
+Here is an example of filter.py work:
+[![Dashboard](img/oviginalVScommpressed.png)](https://chart-studio.plotly.com/~tikhon.radk/11#/)[Dashboard](https://chart-studio.plotly.com/~tikhon.radk/11#/)
+
+
 ### Extensibility and Custom Events
 
 The project's architecture encourages extensibility. You are invited to create new events and seamlessly connect them to the Router. This flexibility empowers you to tailor the project to your specific requirements. Whether you are building a trading strategy, a machine learning model, or any other application, the modular design and event-driven architecture make it easy to expand and adapt the project to your unique needs.
