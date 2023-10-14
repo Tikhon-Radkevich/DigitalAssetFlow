@@ -1,4 +1,4 @@
-# Project Title
+# DigitalAssetFlow: Real-time Mining & Analytics
 
 ![](img/back.png)
 
@@ -78,4 +78,5 @@ When I collected data, I used the following structure:
   "time_n_ms": {....}
 }
 ```
+
 
